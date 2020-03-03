@@ -1,4 +1,4 @@
-<!-- # EmployeeNPCGenerator
+# EmployeeNPCGenerator
 employee generator to make new company NPCs
 # Unit 10 OOP Homework: Template Engine - Employee Summary
 
@@ -174,4 +174,4 @@ You are required to submit the following:
 * **Optional**: GIF of your CLI applications functionality
 
 - - -
-© 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved. -->
+© 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.

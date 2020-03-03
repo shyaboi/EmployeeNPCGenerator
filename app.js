@@ -10,14 +10,6 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
-const becky = new Intern("Becky", 3, "becky@2u.com", "UofA");
-const tucker = new Engineer("tucker", 3, "becky@2u.com", "tuckerbeauchamp");
-const brent = new Manager("brent", 3, "becky@2u.com", 214);
-const dave = new Manager("donus", 3, "donus@gmiak.com", 333);
-console.log(becky);
-console.log(tucker);
-console.log(brent);
-console.log(dave);
 // console.log(render);
 // render(dave)
 
@@ -40,12 +32,13 @@ function start() {
     
     )
     .then(function(response) {
-      console.log(response);
-      console.log(response.role);
+    //   console.log(response);
+    //   console.log(response.role);
 
       switch (response.role) {
         case "Manger":
-          manager();
+          manager(new Manager(djkn,mkflds,nmjkfnsd));
+          console.log(role);
           break;
         case "Engineer":
           engineer();
@@ -60,8 +53,8 @@ function start() {
 }
 start();
 
-function manager() {}
-
+function manager() {
+}
 function intern() {}
 
 function engineer() {}
