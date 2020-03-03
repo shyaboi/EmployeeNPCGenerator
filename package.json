@@ -1,0 +1,22 @@
+{
+  "name": "employeenpcgenerator",
+  "version": "1.0.0",
+  "description": "<!-- # EmployeeNPCGenerator employee generator to make new company NPCs # Unit 10 OOP Homework: Template Engine - Employee Summary",
+  "main": "Employee.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shyaboi/EmployeeNPCGenerator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shyaboi/EmployeeNPCGenerator/issues"
+  },
+  "homepage": "https://github.com/shyaboi/EmployeeNPCGenerator#readme",
+  "devDependencies": {
+    "inquirer": "^7.0.5"
+  }
+}
