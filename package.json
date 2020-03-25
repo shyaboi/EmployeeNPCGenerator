@@ -18,5 +18,8 @@
   "homepage": "https://github.com/shyaboi/EmployeeNPCGenerator#readme",
   "devDependencies": {
     "inquirer": "^7.0.5"
+  },
+  "dependencies": {
+    "mysql": "^2.18.1"
   }
 }
