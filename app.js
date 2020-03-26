@@ -15,18 +15,20 @@ const connection = mysql.createConnection({
     password: "",
     database: "employees_db"
 });
-
+// port var
 const PORT = connection.config.port
 // console.log(PORT)
-
+// connection init with port var clg
 connection.connect(function(err) {
     if (err) throw err;
     console.log("connected to PORT: " + PORT + "\n");
     start();
 });
-
+// start inquirer
 function start() {
     inquirer
+    //  inquirer prompt init for 1st sereris of questions
+
         .prompt([{
             type: "list",
             message: "What would you like to do?",
@@ -43,19 +45,20 @@ function start() {
                 "Exit"
             ]
         }])
+        // switch cases for inquirer prompt selection
         .then(function(res) {
             switch (res.start) {
 
                 case "View all Employees":
-                    viewAllEmployees();
+                    viewAllEmp();
                     break;
 
                 case "Add Employee":
-                    addEmployee();
+                    addEmp();
                     break;
 
                 case "Remove Employee":
-                    removeEmployee();
+                    removeEmp();
                     break;
 
                 case "Add Department":
@@ -83,4 +86,15 @@ function start() {
                     break;
             }
         })
+}
+
+// view all emp from sql db function
+function viewAllEmp() {
+
+    connection.query("SELECT employee.first_name, employee.last_name, role.title AS role, manager.first_name AS manager FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager ON employee.manager_id = manager.id GROUP BY employee.id",
+        function(err, res) {
+            if (err) throw err;
+                console.table(res);
+            start();
+        });
 }
