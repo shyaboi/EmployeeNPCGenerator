@@ -62,15 +62,14 @@ function start() {
         message: "What would you like to do?",
         name: "start",
         choices: [
-          chalk.blue("Add Employee"),
-          chalk.yellow("View all Employees"),
-          chalk.blue("Add Employee"),
+            chalk.yellow("View all Employees"),
+            chalk.cyan("View all Departments"),
+            chalk.blueBright("View all Roles"),
+            chalk.blue("Add Employee"),
           chalk.magenta("Add Department"),
-          chalk.cyan("View all Departments"),
           chalk.greenBright("Add Roles"),
-          chalk.blueBright("View all Roles"),
-          chalk.yellowBright("Update Employee Role"),
-          chalk.bgRed("Remove Employee"),
+        //   chalk.yellowBright("Update Employee Role"),
+          chalk.bgRed("Terminate Employee"),
           chalk.dim.bgGreenBright.black("Exit")
         ]
       }
@@ -106,9 +105,9 @@ function start() {
           viewAllRoles();
           break;
 
-        case chalk.yellowBright("Update Employee Role"):
-          updateEmRole();
-          break;
+        // case chalk.yellowBright("Update Employee Role"):
+        //   updateEmRole();
+        //   break;
 
         case chalk.dim.bgGreenBright.black("Exit"):
           clear();
@@ -219,12 +218,12 @@ function removeEmp() {
   );
 
   // for loop to run through employee names
-  let employeeList = [];
+  let empList = [];
   connection.query(
     "SELECT employee.first_name, employee.last_name FROM employee",
     (err, res) => {
       for (let i = 0; i < res.length; i++) {
-        employeeList.push(res[i].first_name + " " + res[i].last_name);
+        empList.push(res[i].first_name + " " + res[i].last_name);
       }
       inquirer
         .prompt([
@@ -232,7 +231,7 @@ function removeEmp() {
             type: "list",
             message: "Choose An Employee to Terminate!",
             name: "employee",
-            choices: employeeList
+            choices: empList
           }
         ])
         .then(function(res) {
@@ -261,7 +260,7 @@ function removeEmp() {
     }
   );
 }
-
+// view all deparment
 function viewAllDept() {
   connection.query("SELECT * FROM department", function(err, res) {
     clear();
@@ -272,7 +271,7 @@ function viewAllDept() {
     }, 2000);
   });
 }
-
+// add department function
 function addDept() {
   clear();
   console.log(chalk.magentaBright(figlet.textSync("Add A Deparment")));
@@ -281,7 +280,7 @@ function addDept() {
     .prompt([
       {
         type: "input",
-        name: "departmentName",
+        name: "departName",
         message: "What Department would you like to add?"
       }
     ])
@@ -289,7 +288,7 @@ function addDept() {
       const query = connection.query(
         "INSERT INTO department SET ?",
         {
-          name: res.departmentName
+          name: res.departName
         },
 
         function(err, res) {
@@ -308,4 +307,67 @@ function addDept() {
         }
       );
     });
+}
+// add new role
+function addRole() {
+    clear(),
+              console.log(
+                chalk.magentaBright(figlet.textSync("Add a New Role"))
+              );
+    // open arr for temp storage
+    let departments = [];
+    // db query
+    connection.query("SELECT * FROM department",
+    function(err, res) {
+        if (err) throw err;
+        // for loop for department show all
+            for (let i = 0; i < res.length; i++) {
+                res[i].first_name + " " + res[i].last_name
+                departments.push({ name: res[i].name, value: res[i].id });
+            }
+            inquirer
+                .prompt([{
+                        type: "input",
+                        name: "title",
+                        message: "What is the Name of the New Role?"
+                    },
+                    {
+                        type: "input",
+                        name: "salary",
+                        message: "How Much Dosh?"
+                    },
+                    {
+                        type: "list",
+                        name: "department",
+                        message: "What Department Is This Role In?",
+                        choices: departments
+                    }
+                ])
+                .then(function(res) {
+                    console.log(res);
+                    const query = connection.query(
+                        "INSERT INTO role SET ?", {
+                            title: res.title,
+                            salary: res.salary,
+                            department_id: res.department
+                        },
+                        function(err, res) {
+                            if (err) throw err;
+
+                            start();
+                        }
+                    )
+                })
+        })
+}
+
+// view all roles
+function viewAllRoles() {
+    clear();
+  console.log(chalk.magentaBright(figlet.textSync("All Roles")));
+    connection.query("SELECT role.*, department.name FROM role LEFT JOIN department ON department.id = role.department_id", function(err, res) {
+        if (err) throw err;
+        console.table(res);
+        start();
+    })
 }

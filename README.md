@@ -1,76 +1,82 @@
-# EmployeeNPCGenerator
-employee generator to make new company NPCs
-# Unit 10 OOP Homework: Template Engine - Employee Summary
+# Unit 12 MySQL Homework: Employee Tracker
 
-One of the most important aspects of programming is writing code that is readable, reliable, and maintainable. Oftentimes, *how* we design our code is just as important as the code itself. In this homework assignment, your challenge is to build a Node CLI that takes in information about employees and generates an HTML webpage that displays summaries for each person. Since testing is a key piece in making code maintainable, you will also be ensuring that all unit tests pass.
-
+Developers are often tasked with creating interfaces that make it easy for non-developers to view and interact with information stored in databases. Often these interfaces are known as **C**ontent **M**anagement **S**ystems. In this homework assignment, your challenge is to architect and build a solution for managing a company's employees using node, inquirer, and MySQL.
 
 ## Instructions
 
-You will build a software engineering team generator command line application. The application will prompt the user for information about the team manager and then information about the team members. The user can input any number of team members, and they may be a mix of engineers and interns. This assignment must also pass all unit tests. When the user has completed building the team, the application will create an HTML file that displays a nicely formatted team roster based on the information provided by the user. Following the [common templates for user stories](https://en.wikipedia.org/wiki/User_story#Common_templates), we can frame this challenge as follows:
+Design the following database schema containing three tables:
+
+![Database Schema](Assets/schema.png)
+
+* **department**:
+
+  * **id** - INT PRIMARY KEY
+  * **name** - VARCHAR(30) to hold department name
+
+* **role**:
+
+  * **id** - INT PRIMARY KEY
+  * **title** -  VARCHAR(30) to hold role title
+  * **salary** -  DECIMAL to hold role salary
+  * **department_id** -  INT to hold reference to department role belongs to
+
+* **employee**:
+
+  * **id** - INT PRIMARY KEY
+  * **first_name** - VARCHAR(30) to hold employee first name
+  * **last_name** - VARCHAR(30) to hold employee last name
+  * **role_id** - INT to hold reference to role employee has
+  * **manager_id** - INT to hold reference to another employee that manager of the current employee. This field may be null if the employee has no manager
+  
+Build a command-line application that at a minimum allows the user to:
+
+  * Add departments, roles, employees
+
+  * View departments, roles, employees
+
+  * Update employee roles
+
+Bonus points if you're able to:
+
+  * Update employee managers
+
+  * View employees by manager
+
+  * Delete departments, roles, and employees
+
+  * View the total utilized budget of a department -- ie the combined salaries of all employees in that department
+
+We can frame this challenge as follows:
 
 ```
-As a manager
-I want to generate a webpage that displays my team's basic info
-so that I have quick access to emails and GitHub profiles
+As a business owner
+I want to be able to view and manage the departments, roles, and employees in my company
+So that I can organize and plan my business
 ```
 
 How do you deliver this? Here are some guidelines:
 
-* Use the [Inquirer npm package](https://github.com/SBoudrias/Inquirer.js/) to prompt the user for their email, id, and specific information based on their role with the company. For instance, an intern may provide their school, whereas an engineer may provide their GitHub username.
+* Use the [MySQL](https://www.npmjs.com/package/mysql) NPM package to connect to your MySQL database and perform queries.
 
-* Your app will run as a Node CLI to gather information about each employee.
+* Use [InquirerJs](https://www.npmjs.com/package/inquirer/v/0.2.3) NPM package to interact with the user via the command-line.
 
-* Below is an example of what your application may look like. Remember, the styling is completely up to you so try to make it unique.
+* Use [console.table](https://www.npmjs.com/package/console.table) to print MySQL rows to the console. There is a built-in version of `console.table`, but the NPM package formats the data a little better for our purposes.
 
-![Employee Summary 1](./Assets/10-OOP-homework-demo-1.png)
-![Employee Summary 2](./Assets/10-OOP-homework-demo-2.png)
+* You may wish to have a separate file containing functions for performing specific SQL queries you'll need to use. Could a constructor function or a class be helpful for organizing these?
 
-In the `Develop` folder, there is a `package.json`, so make sure to `npm install`.
+* You will need to perform a variety of SQL JOINS to complete this assignment, and it's recommended you review the week's activities if you need a refresher on this.
 
-The dependencies are, [jest](https://jestjs.io/) for running the provided tests, and [inquirer](https://www.npmjs.com/package/inquirer) for collecting input from the user.
-
-There are also unit tests to help you build the classes necessary.
-
-It is recommended that you follow this workflow:
-
-1. Run tests
-2. Create or update classes to pass a single test case
-3. Repeat
-
-🎗 Remember, you can run the tests at any time with `npm run test`
-
-It is recommended that you start with a directory structure that looks like this:
-
-```
-lib/           // classes and helper code
-output/        // rendered output
-templates/     // HTML template(s)
-test/          // jest tests
-  Employee.test.js
-  Engineer.test.js
-  Intern.test.js
-  Manager.test.js
-app.js         // Runs the application
-```
+![Employee Tracker](Assets/employee-tracker.gif)
 
 ### Hints
 
-* Create multiple HTML templates for each type of user. For example, you could use the following templates:
+* You may wish to include a `seed.sql` file to pre-populate your database. This will make development of individual features much easier.
 
-  * `main.html`
+* Focus on getting the basic functionality completed before working on more advanced features.
 
-  * `engineer.html`
-  
-  * `intern.html`
-  
-  * `manager.html`
+* Review the week's activities for a refresher on MySQL.
 
-* You will want to make your methods as pure as possible. This means try to make your methods simple so that they are easier to test.
-
-* The different employee types should all inherit some methods and properties from a base class of `Employee`.
-
-* In your HTML template files, you may want to add a placeholder character that helps your program identify where the dynamic markup begins and ends.
+* Check out [SQL Bolt](https://sqlbolt.com/) for some extra MySQL help.
 
 ## Minimum Requirements
 
@@ -78,71 +84,25 @@ app.js         // Runs the application
 
 * GitHub repository with a unique name and a README describing the project.
 
-* User can use the CLI to generate an HTML page that displays information about their team.
+* The command-line application should allow users to:
 
-* All tests must pass.
+  * Add departments, roles, employees
 
-### Classes
-The project must have the these classes: `Employee`, `Manager`, `Engineer`,
-`Intern`. The tests for these classes in the `tests` directory must all pass.
+  * View departments, roles, employees
 
-The first class is an `Employee` parent class with the following properties and
-methods:
-
-  * name
-  * id
-  * email
-  * getName()
-  * getId()
-  * getEmail()
-  * getRole() // Returns 'Employee'
-
-The other three classes will extend `Employee`. 
-
-In addition to `Employee`'s properties and methods, `Manager` will also have:
-
-  * officeNumber
-
-  * getRole() // Overridden to return 'Manager'
-
-In addition to `Employee`'s properties and methods, `Engineer` will also have:
-
-  * github  // GitHub username
-
-  * getGithub()
-
-  * getRole() // Overridden to return 'Engineer'
-
-In addition to `Employee`'s properties and methods, `Intern` will also have:
-
-  * school 
-
-  * getSchool()
-
-  * getRole() // Overridden to return 'Intern'
-
-### User input
-
-The project must prompt the user to build an engineering team. An engineering
-team consists of a manager, and any number of engineers and interns.
-
-### Roster output
-
-The project must generate a `team.html` page in the `output` directory, that displays a nicely formatted team roster. Each team member should display the following in no particular order:
-
-  * Name
-
-  * Role
-
-  * ID
-
-  * Role-specific property (School, link to GitHub profile, or office number)
+  * Update employee roles
 
 ## Bonus
 
-* Use validation to ensure that the information provided is in the proper expected format.
+* The command-line application should allow users to:
 
-* Add the application to your portfolio.
+  * Update employee managers
+
+  * View employees by manager
+
+  * Delete departments, roles, and employees
+
+  * View the total utilized budget of a department -- ie the combined salaries of all employees in that department
 
 ## Commit Early and Often
 
@@ -170,8 +130,6 @@ We would like you to have well over 200 commits by graduation, so commit early a
 You are required to submit the following:
 
 * The URL of the GitHub repository
-
-* **Optional**: GIF of your CLI applications functionality
 
 - - -
 © 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.
