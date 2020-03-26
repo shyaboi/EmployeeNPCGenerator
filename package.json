@@ -4,7 +4,6 @@
   "description": "<!-- # EmployeeNPCGenerator employee generator to make new company NPCs # Unit 10 OOP Homework: Template Engine - Employee Summary",
   "main": "Employee.js",
   "scripts": {
-    
     "start": "npm i && node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

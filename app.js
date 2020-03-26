@@ -333,7 +333,7 @@ function addRole() {
                     },
                     {
                         type: "input",
-                        name: "salary",
+                        name: "dosh",
                         message: "How Much Dosh?"
                     },
                     {
@@ -348,7 +348,7 @@ function addRole() {
                     const query = connection.query(
                         "INSERT INTO role SET ?", {
                             title: res.title,
-                            salary: res.salary,
+                            dosh: res.dosh,
                             department_id: res.department
                         },
                         function(err, res) {
