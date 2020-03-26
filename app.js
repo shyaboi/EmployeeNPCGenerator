@@ -65,7 +65,6 @@ function start() {
           chalk.blue("Add Employee"),
           chalk.yellow("View all Employees"),
           chalk.blue("Add Employee"),
-          chalk.yellow("View all Employees"),
           chalk.magenta("Add Department"),
           chalk.cyan("View all Departments"),
           chalk.greenBright("Add Roles"),
@@ -268,3 +267,16 @@ function removeEmp() {
         }
     );
 };
+
+function viewAllDept() {
+    connection.query("SELECT * FROM department", function(err, res) {
+        clear()
+        console.log(
+            chalk.yellow(
+              figlet.textSync("All Departments")
+            )
+          );
+        console.table(res);
+        setTimeout(() =>{start()}, 2000);
+    })
+}
