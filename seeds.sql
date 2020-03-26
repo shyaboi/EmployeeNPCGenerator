@@ -9,15 +9,15 @@ VALUES ("Money People");
 INSERT INTO department (name)
 VALUES ("The Rest");
 
-INSERT INTO role (title, salary, department_id)
+INSERT INTO role (title, dosh, department_id)
 VALUES ("Top Lad", 3000490, 1);
-INSERT INTO role (title, salary, department_id)
+INSERT INTO role (title, dosh, department_id)
 VALUES ("Grand Master of Underlings", 534805304, 2);
-INSERT INTO role (title, salary, department_id)
+INSERT INTO role (title, dosh, department_id)
 VALUES ("Dream Alchemist", 4389439, 2);
-INSERT INTO role (title, salary, department_id)
+INSERT INTO role (title, dosh, department_id)
 VALUES ("Legal Bank Robber", 4378295, 3);
-INSERT INTO role (title, salary, department_id)
+INSERT INTO role (title, dosh, department_id)
 VALUES ("Cheif Everything Officer", 4993000, 4);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
