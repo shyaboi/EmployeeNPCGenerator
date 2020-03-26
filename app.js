@@ -30,6 +30,8 @@ const PORT = connection.config.port;
 connection.connect(function(err) {
   if (err) throw err;
   clear();
+  
+  
   console.log(chalk.greenBright("connected to PORT: " + PORT + "\n"));
   console.log(
     chalk.red(
@@ -37,12 +39,20 @@ connection.connect(function(err) {
       //   figlet.textSync("All Employees", { horizontalLayout: "full" })
     )
   );
-});
-start();
+
+setTimeout(() => { start();}, 2000);
+      
+    });
 
 // start inquirer
 function start() {
   // clear()
+  console.log(
+    chalk.red(
+      figlet.textSync("Main Menu", { horizontalLayout: "full" })
+      //   figlet.textSync("All Employees", { horizontalLayout: "full" })
+    )
+  );
   //  inquirer prompt init for 1st sereris of questions
   inquirer
     // figlet prompt
@@ -133,7 +143,8 @@ function viewAllEmp() {
         )
       );
       console.table(res);
-      start();
+      setTimeout(() => { start();}, 2000);
+      
     }
   );
 }
@@ -199,3 +210,61 @@ function addEmp() {
       );
     });
 }
+
+
+function removeEmp() {
+
+    clear();
+    console.log(
+      chalk.green(
+        figlet.textSync("Terminator", { horizontalLayout: "full" })
+      )
+    );
+
+    let employeeList = [];
+    connection.query(
+        "SELECT employee.first_name, employee.last_name FROM employee", (err, res) => {
+            for (let i = 0; i < res.length; i++) {
+                employeeList.push(res[i].first_name + " " + res[i].last_name);
+            }
+            inquirer
+                .prompt([{
+                    type: "list",
+                    message: "Choose An Employee to Terminate!",
+                    name: "employee",
+                    choices: employeeList 
+                }, ])
+                .then(function(res) {
+                    const query = connection.query(
+                        `DELETE FROM employee WHERE concat(first_name, ' ' ,last_name) = '${res.employee}'`,
+                        function(err, res) {
+                            if (err) throw err;
+                       
+                           setTimeout(() => {
+                            console.log(
+                              chalk.green(
+                                figlet.textSync("Employee")
+                              )
+                            );
+                        }, 1000);
+                        
+                        clear()
+                        setTimeout(() => {
+                         console.log(
+                           chalk.redBright(
+                             figlet.textSync("Terminated!!")
+                           )
+                         );
+                     }, 2000);
+
+                            setTimeout(() => {
+                                clear()
+                              
+                              start();
+                              }, 4000);
+                            
+                        });
+                });
+        }
+    );
+};
