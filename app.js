@@ -30,8 +30,7 @@ const PORT = connection.config.port;
 connection.connect(function(err) {
   if (err) throw err;
   clear();
-  
-  
+
   console.log(chalk.greenBright("connected to PORT: " + PORT + "\n"));
   console.log(
     chalk.red(
@@ -40,9 +39,10 @@ connection.connect(function(err) {
     )
   );
 
-setTimeout(() => { start();}, 2000);
-      
-    });
+  setTimeout(() => {
+    start();
+  }, 1000);
+});
 
 // start inquirer
 function start() {
@@ -94,7 +94,7 @@ function start() {
           viewAllDept();
           break;
 
-        case chalk.bgRed("Remove Employee"):
+        case chalk.bgRed("Terminate Employee"):
           removeEmp();
           break;
 
@@ -111,7 +111,7 @@ function start() {
           break;
 
         case chalk.dim.bgGreenBright.black("Exit"):
-            clear()
+          clear();
           console.log(
             chalk.red(
               figlet.textSync("WHyÿyyyyyyyyyy!!!!!!!!!", {
@@ -142,8 +142,9 @@ function viewAllEmp() {
         )
       );
       console.table(res);
-      setTimeout(() => { start();}, 2000);
-      
+      setTimeout(() => {
+        start();
+      }, 2000);
     }
   );
 }
@@ -156,7 +157,7 @@ function addEmp() {
       figlet.textSync("Adding New Employee", { horizontalLayout: "full" })
     )
   );
-//   add employee inquirer start
+  //   add employee inquirer start
   inquirer
     .prompt([
       {
@@ -183,8 +184,8 @@ function addEmp() {
     ])
     .then(function(res) {
       "All Emloyees",
-      console.log(chalk.green(figlet.textSync("Employee"))),
-      console.log(chalk.blueBright(figlet.textSync("Added!"))),
+        console.log(chalk.green(figlet.textSync("Employee"))),
+        console.log(chalk.blueBright(figlet.textSync("Added!"))),
         function(err, data) {
           if (err) {
             console.log("Something went wrong...");
@@ -200,83 +201,111 @@ function addEmp() {
         function(err, res) {
           if (err) throw err;
           setTimeout(() => {
-            clear()
-          
-          start();
+            clear();
+
+            start();
           }, 2000);
-          
         }
       );
     });
 }
 
+// remove employee function
 
 function removeEmp() {
+  clear();
+  console.log(
+    chalk.green(figlet.textSync("Terminator", { horizontalLayout: "full" }))
+  );
 
-    clear();
-    console.log(
-      chalk.green(
-        figlet.textSync("Terminator", { horizontalLayout: "full" })
-      )
-    );
+  // for loop to run through employee names
+  let employeeList = [];
+  connection.query(
+    "SELECT employee.first_name, employee.last_name FROM employee",
+    (err, res) => {
+      for (let i = 0; i < res.length; i++) {
+        employeeList.push(res[i].first_name + " " + res[i].last_name);
+      }
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            message: "Choose An Employee to Terminate!",
+            name: "employee",
+            choices: employeeList
+          }
+        ])
+        .then(function(res) {
+          const query = connection.query(
+            `DELETE FROM employee WHERE concat(first_name, ' ' ,last_name) = '${res.employee}'`,
+            function(err, res) {
+              if (err) throw err;
 
-    let employeeList = [];
-    connection.query(
-        "SELECT employee.first_name, employee.last_name FROM employee", (err, res) => {
-            for (let i = 0; i < res.length; i++) {
-                employeeList.push(res[i].first_name + " " + res[i].last_name);
+              setTimeout(() => {
+                console.log(chalk.green(figlet.textSync("Employee")));
+              }, 1000);
+
+              clear();
+              setTimeout(() => {
+                console.log(chalk.redBright(figlet.textSync("Terminated!!")));
+              }, 2000);
+
+              setTimeout(() => {
+                clear();
+
+                start();
+              }, 4000);
             }
-            inquirer
-                .prompt([{
-                    type: "list",
-                    message: "Choose An Employee to Terminate!",
-                    name: "employee",
-                    choices: employeeList 
-                }, ])
-                .then(function(res) {
-                    const query = connection.query(
-                        `DELETE FROM employee WHERE concat(first_name, ' ' ,last_name) = '${res.employee}'`,
-                        function(err, res) {
-                            if (err) throw err;
-                       
-                           setTimeout(() => {
-                            console.log(
-                              chalk.green(
-                                figlet.textSync("Employee")
-                              )
-                            );
-                        }, 1000);
-                        
-                        clear()
-                        setTimeout(() => {
-                         console.log(
-                           chalk.redBright(
-                             figlet.textSync("Terminated!!")
-                           )
-                         );
-                     }, 2000);
-
-                            setTimeout(() => {
-                                clear()
-                              
-                              start();
-                              }, 4000);
-                            
-                        });
-                });
-        }
-    );
-};
+          );
+        });
+    }
+  );
+}
 
 function viewAllDept() {
-    connection.query("SELECT * FROM department", function(err, res) {
-        clear()
-        console.log(
-            chalk.yellow(
-              figlet.textSync("All Departments")
-            )
-          );
-        console.table(res);
-        setTimeout(() =>{start()}, 2000);
-    })
+  connection.query("SELECT * FROM department", function(err, res) {
+    clear();
+    console.log(chalk.yellow(figlet.textSync("All Departments")));
+    console.table(res);
+    setTimeout(() => {
+      start();
+    }, 2000);
+  });
+}
+
+function addDept() {
+  clear();
+  console.log(chalk.magentaBright(figlet.textSync("Add A Deparment")));
+
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "departmentName",
+        message: "What Department would you like to add?"
+      }
+    ])
+    .then(function(res) {
+      const query = connection.query(
+        "INSERT INTO department SET ?",
+        {
+          name: res.departmentName
+        },
+
+        function(err, res) {
+          connection.query("SELECT * FROM department", function(err, res) {
+            clear(),
+              console.log(
+                chalk.magentaBright(figlet.textSync("Department Added!"))
+              );
+            setTimeout(() => {
+              console.table(res);
+            }, 1000);
+            setTimeout(() => {
+                start();
+              }, 3000);
+          });
+        }
+      );
+    });
 }
