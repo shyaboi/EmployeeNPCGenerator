@@ -20,7 +20,7 @@ const connection = mysql.createConnection({
   // Your username
   user: "root",
 
-  password: "",
+  password: "root",
   database: "employees_db"
 });
 // port var
@@ -34,7 +34,7 @@ connection.connect(function(err) {
   console.log(chalk.greenBright("connected to PORT: " + PORT + "\n"));
   console.log(
     chalk.red(
-      figlet.textSync("Employee Managment Sim", { horizontalLayout: "full" })
+      figlet.textSync("Employee Managment Sim")
       //   figlet.textSync("All Employees", { horizontalLayout: "full" })
     )
   );
