@@ -5,7 +5,7 @@
 # Installtion
 use $ `npm install`
 <br>
-then $ `npm start`
+then $ `node app.js`
 
 # Usecase
 this is a test employee management simulator with CRUD and a mySQL database.
